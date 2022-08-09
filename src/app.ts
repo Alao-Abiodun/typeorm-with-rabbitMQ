@@ -60,6 +60,18 @@ AppDataSource.initialize().then(async () => {
     }
     );
 
+    app.post('/products/:id/likes', async (req: Request, res: Response) => {
+        const product = await productRepository.findOneBy({ id: parseInt(req.params.id) });
+        if (!product) {
+            res.status(404).send({ message: "Product not found" });
+            return;
+        }
+        product.likes++;
+        await productRepository.save(product);
+        res.send(product);
+    }
+    );
+
 
     app.listen(8000);
 
